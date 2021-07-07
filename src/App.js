@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import React, { Component, useEffect } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+
+  state = {
+    piadas: [],
+  }
+
+  async componentDidMount() {
+    const response = await axios.get("https://v2.jokeapi.dev/joke/Any?amount=5");
+    console.log(response);
+    this.setState({ piadas: response.data.jokes });
+  }
+
+  render() {
+    const { piadas } = this.state;
+    return (
+      <div>
+        <h1>Piadas:</h1>
+        {piadas.map(piada => (
+          <li key={piada.id}>
+            <h2>
+              {piada.setup}
+            </h2>
+            <p>
+              {piada.delivery}
+            </p>
+          </li>
+        ))}
+      </div>
+    );
+  };
+};
 
 export default App;
